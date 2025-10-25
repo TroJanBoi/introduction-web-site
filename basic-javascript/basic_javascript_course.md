@@ -35,6 +35,58 @@ console.log("Hello from the console!");
 
 ### 🗒️ Concept
 
+### 1. var — แบบเก่า (ยุคก่อน ES6)
+### ลักษณะสำคัญ
+- ไม่มีการจำกัดขอบเขตใน block {} (ใช้ได้ทั่วฟังก์ชัน)
+- สามารถประกาศซ้ำชื่อเดิมได้โดยไม่ error
+
+### 🧪 ตัวอย่าง
+``` js
+var x = 10;
+var x = 20; // ✅ ไม่มี error
+console.log(x); // 20
+
+if (true) {
+  var y = 5;
+}
+console.log(y); // ✅ ใช้ได้แม้อยู่นอก if → 5
+```
+
+### 2. let — แบบใหม่ (แนะนำ)
+### - ลักษณะสำคัญ
+- มี block scope → ตัวแปรอยู่ได้แค่ใน { } ที่มันถูกประกาศ
+- ไม่สามารถประกาศซ้ำชื่อใน scope เดียวกันได้
+- ค่าภายในสามารถเปลี่ยนได้
+
+### 🧪 ตัวอย่าง
+``` js
+let a = 10;
+a = 15; // ✅ เปลี่ยนค่าได้
+console.log(a); // 15
+
+if (true) {
+  let b = 5;
+  console.log(b); // ✅ ใช้ได้ใน block
+}
+console.log(b); // ❌ error: b is not defined
+```
+
+### 3. const — ค่าคงที่
+### - ลักษณะสำคัญ
+- เหมือน let ตรงที่มี block scope
+- ❌ แต่ “ไม่สามารถเปลี่ยนค่าหลังประกาศได้”
+- ใช้ประกาศค่าคงที่ เช่น PI, URL, config ฯลฯ
+
+### 🧪 ตัวอย่าง
+``` js
+const PI = 3.14;
+// PI = 3.1415; ❌ Error: Assignment to constant variable
+
+const person = { name: "John", age: 25 };
+person.age = 26; // ✅ เปลี่ยน property ได้ (เพราะ object ไม่ใช่ค่าคงที่จริง)
+console.log(person.age); // 26
+```
+
 Use `let`, `const`, or `var` to store values.
 
 ``` js
