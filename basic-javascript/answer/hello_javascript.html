@@ -1,0 +1,27 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hello JavaScript Example</title>
+</head>
+<body>
+
+  <!-- Paragraph -->
+  <p id="message">Click the button below 👇</p>
+
+  <!-- Button -->
+  <button id="btn">Click Me!</button>
+
+  <!-- JavaScript -->
+  <script>
+    const button = document.getElementById("btn");
+    const paragraph = document.getElementById("message");
+
+    button.addEventListener("click", () => {
+      paragraph.textContent = "Hello JavaScript!";
+    });
+  </script>
+
+</body>
+</html>
