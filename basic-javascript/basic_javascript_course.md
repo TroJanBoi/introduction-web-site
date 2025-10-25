@@ -44,10 +44,13 @@ let isStudent = true;    // boolean
 ```
 
 **Common Data Types**\
-\| Type \| Example \| \|------\|----------\| \| String \| `"Hello"` \|
-\| Number \| `25`, `3.14` \| \| Boolean \| `true`, `false` \| \| Array
-\| `["red", "green", "blue"]` \| \| Object \|
-`{ name: "John", age: 30 }` \|
+\| Type \| Example \| \
+|------\|----------\| \
+| String \| `"Hello"` \|\
+| Number \| `25`, `3.14` \| \
+| Boolean \| `true`, `false` \| \
+| Array \| `["red", "green", "blue"]` \| \
+| Object \| `{ name: "John", age: 30 }` \|
 
 ### 💡 Exercise
 
