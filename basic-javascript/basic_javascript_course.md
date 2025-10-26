@@ -1,13 +1,5 @@
 # 🧠 Basic JavaScript for Beginners
 
-## 📍 Course Overview
-
--   **Duration:** 6 Lessons
--   **Goal:**\
-    ✔ Understand JavaScript fundamentals\
-    ✔ Create interactive web elements\
-    ✔ Apply knowledge to Chrome Extensions
-
 ------------------------------------------------------------------------
 
 ## 🧩 Lesson 1: Introduction to JavaScript
