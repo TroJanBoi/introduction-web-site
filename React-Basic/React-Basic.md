@@ -296,9 +296,27 @@ useEffect(() => {
 ---
 
 ## 🔹 19. Lifecycle ของ Component
-- Mount → Update → Unmount
-- ใช้ `useEffect` เพื่อจัดการช่วงเหล่านี้
+### 🧠 ความหมายของ Component Lifecycle
+> ทุก Component ใน React มี “วงจรชีวิต” (Lifecycle) ตั้งแต่เกิด → แสดงผล → อัปเดต → หายไป
+React จะคอยจัดการขั้นตอนเหล่านี้อัตโนมัติ
+และเราสามารถ “สอดแทรกโค้ด” ในแต่ละช่วงได้ด้วย React Hooks เช่น useEffect()
 
+### การเรียงลำดับของ Lifecycle โดยสรุป
+```
+1️⃣ Mounting:
+   - สร้าง component
+   - Render UI
+   - Run useEffect(..., [])
+
+2️⃣ Updating:
+   - State หรือ props เปลี่ยน
+   - Re-render UI
+   - Run useEffect(..., [value])
+
+3️⃣ Unmounting:
+   - ลบ component ออกจาก DOM
+   - Run cleanup function
+```
 ---
 
 ## 🔹 20. Escape Hatches
