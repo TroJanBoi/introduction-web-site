@@ -1,8 +1,10 @@
----
-theme: default
-paginate: true
-title: "React เบื้องต้น: สรุปจาก React.dev/learn (ภาษาไทย)"
----
+# ⚛️ React คืออะไร?
+
+React คือ JavaScript library (ไม่ใช่ framework)
+ที่สร้างขึ้นโดยบริษัท Meta (Facebook)
+ใช้สำหรับสร้าง User Interface (UI) หรือ หน้าจอแสดงผลของเว็บแอปพลิเคชัน
+React ช่วยให้นักพัฒนาสามารถสร้าง UI ที่ซับซ้อน ได้ด้วยการแยกออกเป็นส่วนย่อย ๆ ที่เรียกว่า Components
+
 
 # ⚛️ React เบื้องต้น (React.dev/learn)
 ### เส้นทางการเรียนรู้ React อย่างเป็นทางการ
