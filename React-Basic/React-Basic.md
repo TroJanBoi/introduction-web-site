@@ -107,32 +107,145 @@ const [count, setCount] = useState(0);
 ---
 
 ## 🔹 10. Rendering และ Committing
+
+React ทำงาน 2 ขั้นตอนหลัก
+React ไม่ได้ “อัปเดต DOM จริง” ทันทีทุกครั้งที่เราเปลี่ยนค่า state — แต่จะทำผ่าน สองเฟส (phases) เพื่อให้เร็วและมีประสิทธิภาพ
 1. **Render Phase:** React คำนวณสิ่งที่จะเปลี่ยน
 2. **Commit Phase:** React อัปเดต DOM จริง
 
+### 🧩 ขั้นตอนที่ 1: Render Phase
+- React จะ “คำนวณว่า UI ควรเปลี่ยนตรงไหน”
+- ใช้ข้อมูลจาก state และ props ใหม่ → สร้าง Virtual DOM tree ใหม่
+- ยังไม่แตะต้อง DOM จริงในหน่วยความจำ
+
+```jsx
+  // React คำนวณจาก state ใหม่ ว่าจะเปลี่ยนอะไร
+  const [count, setCount] = useState(0);
+  return <h1>{count}</h1>;
+```
+> ถ้าเรากดปุ่มเพิ่ม count → React จะจำลอง DOM ใหม่ในหน่วยความจำก่อน
+> แล้วเปรียบเทียบกับ DOM เก่าเพื่อหาส่วนที่ต่าง
+
+### 🧩 ขั้นตอนที่ 2: Commit Phase
+- React จะ “commit” การเปลี่ยนแปลงนั้นลง DOM จริง (Real DOM)
+- จะเปลี่ยนเฉพาะ node ที่ต่าง (ไม่ render ทั้งหน้าใหม่)
+- React ทำงานเร็วเพราะใช้ Virtual DOM diffing ก่อน commit
+
 ---
 
-## 🔹 11. Virtual DOM & Reconciliation
-- React สร้าง “Virtual DOM” เพื่อเปรียบเทียบกับของเดิม
-- อัปเดตเฉพาะส่วนที่เปลี่ยนจริง ๆ
+## 🔹 11. The UI Tree and Reconciliation
 
+### UI Tree คืออะไร?
+> React มอง UI ของเราเป็น ต้นไม้ (tree) ที่มี node ย่อย ๆ
+> แต่ละ node = 1 component
+```jsx
+<App>
+ ├── <Header />
+ ├── <Content>
+ │    ├── <Post />
+ │    └── <CommentList />
+ └── <Footer />
+```
+
+### 🔄 Reconciliation คืออะไร?
+
+- คือกระบวนการที่ React ใช้ เปรียบเทียบ Virtual DOM เก่ากับใหม่
+- เพื่อหาว่า “อะไรเปลี่ยนบ้าง” (เรียกว่า diffing algorithm)
+- จากนั้น React จะอัปเดตเฉพาะส่วนที่ต่างจริง ๆ
+  > 🔍 เช่น ถ้ามีแค่ <p> ตัวหนึ่งเปลี่ยนข้อความ
+  > React จะไม่แตะส่วนอื่นของหน้าเลย
+📈 ผลลัพธ์: UI อัปเดตเร็วและประหยัดพลังประมวลผลมากกว่าการ re-render ทั้งหน้า
 ---
 
 ## 🔹 12. การแชร์ State ระหว่าง Components
-- ย้าย state ขึ้น “Parent” แล้วส่งผ่าน props ลงไป
-- เรียกว่า **Lifting State Up**
+### 📦 ปัญหา:
+บางครั้ง component หลายตัวต้องใช้ข้อมูลร่วมกัน เช่น
+```jsx
+<PlayerScore />
+<PlayerLevel />
+```
+ทั้งคู่ต้องรู้ “คะแนนของผู้เล่น” เดียวกัน
+
+### 🧩 วิธีแก้: Lifting State Up
+- ย้าย state จาก component ย่อย ๆ → ไปไว้ที่ Parent
+- แล้วส่งข้อมูลผ่าน props ลงไป
+```jsx
+function Game() {
+  const [score, setScore] = useState(0);
+  return (
+    <>
+      <PlayerScore score={score} />
+      <PlayerLevel score={score} />
+    </>
+  );
+}
+
+function PlayerScore({ score }) {
+  return <h2>Score: {score}</h2>;
+}
+```
+📘 เรียกแนวทางนี้ว่า “Lifting State Up”
+เพราะเรา “ยก state ขึ้นไปอยู่สูงกว่า” เพื่อให้ลูกหลายตัวมองเห็นค่าเดียวกันได้
 
 ---
 
 ## 🔹 13. การคงหรือรีเซ็ต State
-- React จำ state ตามตำแหน่งของ component
-- ถ้าลำดับเปลี่ยน → state จะถูก reset
+### 🧠 React จำค่า state ตาม “ตำแหน่งของ component ใน tree”
+- ถ้า component ยังอยู่ตำแหน่งเดิม → React จะ เก็บ state เดิมไว้ (preserve)
+- ถ้า component ถูกลบออกหรือลำดับเปลี่ยน → React จะ รีเซ็ต state ใหม่ (reset)
+```jsx
+function App({ user }) {
+  return (
+    <div>
+      {user ? <Dashboard /> : <LoginForm />}
+    </div>
+  );
+}
+```
+ถ้า user เปลี่ยนจาก null → object
+React จะนำ <LoginForm /> ออก และสร้าง <Dashboard /> ใหม่
+→ state ภายใน LoginForm จะถูก reset (เพราะ component ถูกลบออกจาก tree)
 
+💡 นี่คือเหตุผลว่าทำไมบางครั้งเมื่อเราสลับหน้า → ฟอร์มจะ “รีเซ็ตค่า”
 ---
 
 ## 🔹 14. การแยก Component ย่อย
-- แยก UI ออกเป็นส่วนเล็ก ๆ เพื่อความชัดเจนและใช้ซ้ำได้
+### 🎨 แนวคิด: “แยกส่วน UI ให้ชัดเจนและใช้ซ้ำได้”
+> ถ้ามีโค้ด UI ที่ซ้ำหลายที่ — ควรแยกออกมาเป็น component ใหม่
 
+### 🔸 ตัวอย่างก่อนแยก: 
+```jsx
+<div className="card">
+  <h2>React</h2>
+  <p>JavaScript library for UI</p>
+</div>
+
+<div className="card">
+  <h2>Vue</h2>
+  <p>Progressive framework</p>
+</div>
+```
+
+### 🔸 หลังแยกเป็น Component:
+```jsx
+function Card({ title, desc }) {
+  return (
+    <div className="card">
+      <h2>{title}</h2>
+      <p>{desc}</p>
+    </div>
+  );
+}
+
+<Card title="React" desc="JavaScript library for UI" />
+<Card title="Vue" desc="Progressive framework" />
+```
+### ✅ ข้อดี:
+
+- โค้ดสั้นลง
+- อ่านง่าย
+- ใช้ซ้ำได้ในหลายที่
+- แก้ไขเพียงจุดเดียว (component เดียว)
 ---
 
 ## 🔹 15. JSX Children
